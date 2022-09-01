@@ -14,7 +14,7 @@ type Checklist struct {
 }
 
 type User struct {
-	gorm.Model
+	ID       int
 	Username string
 	Password string
 }
@@ -39,7 +39,7 @@ func toCoreList(data []Checklist) []checklist.Core {
 
 func fromCore(core checklist.Core) Checklist {
 	return Checklist{
-		UserID: core.ID,
+		UserID: core.UserID,
 		Name:   core.Name,
 	}
 }

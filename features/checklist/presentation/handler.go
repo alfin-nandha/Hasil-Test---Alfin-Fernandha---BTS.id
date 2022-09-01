@@ -2,6 +2,7 @@ package presentation
 
 import (
 	"btsid/test/features/checklist"
+	"btsid/test/features/checklist/presentation/request"
 	"btsid/test/helper"
 	"btsid/test/middlewares"
 
@@ -32,15 +33,20 @@ func (h *ChecklistHandler) GetData(c echo.Context) error {
 	return c.JSON(helper.ResponseStatusOkWithData("get data success", result))
 }
 
-// func (h *AuthHandler) Register(c echo.Context) error {
-// 	reqBody := request.User{}
-// 	errBind := c.Bind(&reqBody)
-// 	if errBind != nil {
-// 		return c.JSON(helper.ResponseBadRequest("bad request"))
-// 	}
-// 	err := h.userBusiness.Register(reqBody.ToCore())
-// 	if err != nil {
-// 		return c.JSON(helper.ResponseBadRequest("bad request"))
-// 	}
-// 	return c.JSON(helper.ResponseCreateSuccess("register success"))
-// }
+func (h *ChecklistHandler) InsertData(c echo.Context) error {
+	userID, errToken := middlewares.ExtractToken(c)
+	if userID == 0 || errToken != nil {
+		return c.JSON(helper.ResponseForbidden("not authorized"))
+	}
+	reqBody := request.Checklist{}
+	errBind := c.Bind(&reqBody)
+	if errBind != nil {
+		return c.JSON(helper.ResponseBadRequest("bad request"))
+	}
+	reqBody.UserID = userID
+	err := h.checklistBusiness.InsertData(reqBody.ToCore())
+	if err != nil {
+		return c.JSON(helper.ResponseBadRequest("bad request"))
+	}
+	return c.JSON(helper.ResponseCreateSuccess("insert success"))
+}

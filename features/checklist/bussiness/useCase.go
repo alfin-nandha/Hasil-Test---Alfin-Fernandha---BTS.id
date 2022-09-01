@@ -1,6 +1,8 @@
 package bussiness
 
-import "btsid/test/features/checklist"
+import (
+	"btsid/test/features/checklist"
+)
 
 type checklistUseCase struct {
 	checklistData checklist.Data
@@ -18,4 +20,12 @@ func (uc *checklistUseCase) GetData(id int) ([]checklist.Core, error) {
 		return []checklist.Core{}, err
 	}
 	return result, nil
+}
+
+func (uc *checklistUseCase) InsertData(core checklist.Core) error {
+	err := uc.checklistData.InsertData(core)
+	if err != nil {
+		return err
+	}
+	return nil
 }

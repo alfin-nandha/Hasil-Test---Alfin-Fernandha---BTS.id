@@ -24,3 +24,13 @@ func (repo *mysqlChecklistRepository) FindData(id int) ([]checklist.Core, error)
 	}
 	return toCoreList(checklistModel), nil
 }
+
+func (repo *mysqlChecklistRepository) InsertData(core checklist.Core) error {
+	checklistModel := fromCore(core)
+
+	result := repo.db.Create(&checklistModel)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
